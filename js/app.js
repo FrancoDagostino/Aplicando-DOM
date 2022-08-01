@@ -12,31 +12,35 @@ class Productos{
         this.precio = this.precio * 1.21;
     }
 
+    /* Se comenta el codigo hasta poder implementarlo */
 
-     productoElegidos(cantArticulo,productos,listaProductosMostrar){
+//      productoElegidos(cantArticulo,productos,listaProductosMostrar){
 
-        let compra = [];
-        for (let i = 0; i < cantArticulo; i++) {
+//         let compra = [];
+//         for (let i = 0; i < cantArticulo; i++) {
     
-            let productoId = parseInt(prompt(listaProductosMostrar + "\n" + productos.map(p => `${p.id}:  ${p.nombre}  ${p.precio} \n`)));
-            compra[i] = productos.find(p => p.id === productoId);
-            productos[productoId - 1].vendido = true;
-            if(productos[productoId - 1].stock === 0) return alert("el producto elegido no tiene mas stock")
-            else productos[productoId - 1].stock -= 1;
-        }
-        return compra;
-    }
+//             let productoId = parseInt(prompt(listaProductosMostrar + "\n" + productos.map(p => `${p.id}:  ${p.nombre}  ${p.precio} \n`)));
+//             compra[i] = productos.find(p => p.id === productoId);
+//             productos[productoId - 1].vendido = true;
+//             if(productos[productoId - 1].stock === 0) return alert("el producto elegido no tiene mas stock")
+//             else productos[productoId - 1].stock -= 1;
+//         }
+//         return compra;
+//     }
 
+// }
+
+// class ListaCompra{
+//     constructor(id,lista,metodopago,descuento){
+//         this.id = id;
+//         this.lista = lista;
+//         this.metodopago = metodopago;
+//         this.descuento = descuento;
+//     }
+// }
 }
 
-class ListaCompra{
-    constructor(id,lista,metodopago,descuento){
-        this.id = id;
-        this.lista = lista;
-        this.metodopago = metodopago;
-        this.descuento = descuento;
-    }
-}
+
 
 const productos =[];
 const listacompras = [];
@@ -47,44 +51,76 @@ productos.push(new Productos(3,"Disco Duro",5000,6));
 productos.push(new Productos(4,"Placa de Video",80000,3));
 productos.push(new Productos(5,"Fuente", 17000,4));
 
+console.log(productos);
+
+let contenedorMain = document.getElementById("contenedor");
+let padre = document.getElementById("button");
+let button = document.createElement("div");
+
+let carrito = [];
 for(const producto of productos) producto.sumaIva();
 
 
-const realizarCompra = () =>{
+productos.forEach(producto => {
+    const div = document.createElement('div');
+    div.classList.add('contenedor');
+    div.innerHTML += `<h2>${producto.nombre}</h2>
+    <div id="prueba" class="mostrar">
+    <button id="agregar${producto.id}">Agregar</button>
+    </div>
+ </div>
+ <div>`;
 
-    let p = new Productos();
-    let cantArticulo = parseInt(prompt("Seleccione la cantidad de artículos a adquirir (Máximo de artículos por compra 10)"));
-    
-    let listaProductosMostrar = `Eliga componente de pc a adquirir seleccionando su número: \n (maximo productos a elegir ${cantArticulo}) \n`;
+ contenedorMain.appendChild(div);
+    const boton = document.getElementById(`agregar${producto.id}`);
+    console.log(boton);
 
-    if(cantArticulo > 10) return alert("La cantidad seleccionada supera el limite de 10 articulos")
 
-    let compra = p.productoElegidos(cantArticulo,productos,listaProductosMostrar);
+        boton.addEventListener('click',()=>{
+        agregarCarrito(producto.id);
+    }); 
+})
 
-    if (compra != undefined){
 
-        listacompras.push(new ListaCompra(Math.round(Math.random() * 10000),compra,"efectivo",false));
-        let total = compra.reduce((acc,c) => acc + c.precio,0);
-    
-        const listadeProductos = ()=>{  
-            let lista = "Los productos comprados fueron: \n";
-            compra.forEach(c => {
-                const {nombre,precio} = c;
-                lista += ` ${nombre}: ${precio} \n`;
-            })
-            return lista;
-        }
-        
-        alert(listadeProductos() + "\n" + "El total a pagar es: " + total);
-    
-         return listacompras;
-    }else{
-        realizarCompra();
-    }
+
+let carritoHTML = document.getElementById("carrito");
+
+let carritoInv = document.querySelector(".carritoInv")
+
+console.log(carritoInv)
+const eliminarCarrito= (productoId)=>{
+    const item = carrito.find(c => c.id === productoId);
+    let indice = carrito.indexOf(item)
+    carrito.splice(indice,1)
+    actualizaCarrito();
 }
 
-let comprafinalizada = realizarCompra();
+const agregarCarrito = (productoId) =>{
+    const item = productos.find(p => p.id === productoId)
+    console.log(item);
+    carrito.push(item);
+    actualizaCarrito();
+    carritoInv.classList.remove('carritoInv')
+    console.log(carritoInv)
+}
 
-console.log(comprafinalizada);
+
+
+const actualizaCarrito = () =>{
+    carritoHTML.innerHTML = "";
+    carrito.forEach(prod => {
+        const h4 = document.createElement('h4');
+        h4.innerHTML+=`
+        <div class="carritoProducto">
+        <p>${prod.nombre}</p>
+        <p>${prod.precio}</p>
+        <button onclick="eliminarCarrito(${prod.id})">Eliminar</button>
+        </div>         `;
+        carritoHTML.appendChild(h4);
+    })
+}
+
+
+
 
 

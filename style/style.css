@@ -7,14 +7,57 @@ h1{
 }
 .contenedorMain{
     display:flex;
+    flex-wrap: wrap;
+    margin-right: 30%;
+    
+    
 }
 .contenedor{
-    width: 400px;
-    height: 400px;
-    background: black;
+    width: 200px;
+    height: 200px;
+    background: rgb(146, 21, 21);
     padding-left: 2%;
     margin-left: 2%;
+    border-radius: 5%;
+    margin-top: 2%;
 }
-h2{
-    color: aliceblue;
+
+.container{
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+.divCarrito{
+    position: absolute;
+}
+.mostrar{
+    display: none;
+}
+.contenedorMain :hover .mostrar{
+    display: block;
+}
+
+.divCarrito{
+    width: 400px;
+    height: 1000px;
+    background-color: black;
+    border-radius: 2%;
+    
+}
+.carritoInv{
+    display: none;
+}
+
+.carritoVi{
+    display: block;
+}
+
+.carritoProducto{
+    width: 350px;
+    height: 200px;
+    background-color: white;
+    margin-left: 8%;
+    margin-top: 2%;
+    border-radius: 2%;
 }
